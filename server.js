@@ -10,7 +10,7 @@ app.use(express.json());              // // FIXED
 const mysql = require('mysql2/promise');
 
 const dbUrl = process.env.DATABASE_URL;
-
+console.log("DB URL:", dbUrl); // ✅ ADD HERE
 if (!dbUrl) {
   console.error("DATABASE_URL missing ❌");
   process.exit(1);
