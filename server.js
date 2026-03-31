@@ -8,9 +8,13 @@ app.use(express.json());              // // FIXED
 
 // server.js
 const mysql = require('mysql2/promise');
-const url = require('url');
 
 const dbUrl = process.env.DATABASE_URL;
+
+if (!dbUrl) {
+  console.error("DATABASE_URL missing ❌");
+  process.exit(1);
+}
 
 const parsed = new URL(dbUrl);
 
@@ -19,9 +23,11 @@ const pool = mysql.createPool({
   user: parsed.username,
   password: parsed.password,
   database: parsed.pathname.replace('/', ''),
-  port: parsed.port,
+  port: Number(parsed.port), // // FIXED
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
-
 // =================== DATABASE INIT ===================
 
 async function initDB() {
